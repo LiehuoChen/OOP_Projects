@@ -1,0 +1,139 @@
+
+	template <class Key, class T,
+			 class Compare = std::less<Key> >
+ 	class Map {
+		public:
+			typedef Key key_type;
+			typedef T	data_type;
+			typedef std::pair<const Key, T> value_type;
+			typedef	Compare	key_compare;
+
+			class value_compare
+				: public std::binary_function<value_type, value_type, bool> {
+					friend class Map<Key, T, Compare>;
+					protected:
+					Compare comp;
+					value_compare(Compare c) : comp(c) {}
+					public:
+					bool operator()(const value_type& x, const value_type &y) const {
+						return comp(x.first, y.first);
+					}
+				};
+		private:
+			typedef rb_tree<key_type, value_type, select1st<value_type>, key_compare> rep_type;
+			rep_type	t;
+		public:
+			typedef typename	rep_type::pointer		pointer;
+			typedef typename	rep_type::const_pointer	const_pointer;
+			typedef typename	rep_type::reference		reference;
+			typedef	typename	rep_type::const_reference const_reference;
+			typedef typename	rep_type::Iterator		Iterator;
+			typedef	typename	rep_type::ConstIterator	ConstIterator;
+			typedef	typename	rep_type::ReverseIterator	ReverseIterator;
+			typedef typename	rep_type::size_type		size_type;
+			typedef typename	rep_type::difference_type	difference_type;
+
+            //constructor 
+			Map() : t(Compare()) {}
+			explicit Map(const Compare &comp) : t(comp) {}
+
+            //constructor with initializer list
+            Map(std::initializer_list<value_type> s):t(Compare()) {
+                for (auto elem = s.begin(); elem != s.end(); ++elem)
+                    this->insert(*elem);
+            }
+
+            //copy constructor 
+			Map(const Map<Key, T, Compare>& x) : t(x.t) {}
+
+            //copy assignment
+			Map<Key, T, Compare>& operator= (const Map<Key, T, Compare> &x) {
+                if (this != &x)
+                    t = x.t;
+				return *this;
+			}
+
+            //move constructor
+			Map(Map<Key, T, Compare>&& x):t(std::move(x.t)) {
+            }
+
+            //copy assignment
+			Map<Key, T, Compare>& operator= (Map<Key, T, Compare> &&x) {
+                if (this != &x) {
+                    t = std::move(x.t);
+                }
+				return *this;
+			}
+
+			key_compare key_comp() const { return t.key_comp(); }
+			value_compare value_compare() const { return value_compare(t.key_comp()); }
+			Iterator begin() { return t.begin(); }
+			ConstIterator begin() const { return t.begin(); }
+			Iterator end() { return t.end(); }
+			ConstIterator end() const { return t.end(); }
+			ReverseIterator rbegin() { return t.rbegin(); }
+			ReverseIterator rend() { return t.rend(); }
+			bool empty() const { return t.empty(); }
+			size_type size() const { return t.size(); }
+
+			T& operator[] (const key_type &k) {
+				return (*(insert(value_type(k, T())))).second;
+			}
+
+			Iterator insert(const value_type& x) {
+                std::pair<Iterator, bool> it;
+                it = t.insert_unique(x);
+				return it.first;
+			}
+
+            Iterator insert(value_type&& x) {
+                std::pair<Iterator, bool> it;
+                it = t.insert_unique(std::move(x));
+				return it.first;
+			}
+
+			void erase(Iterator position) { t.erase(position); }
+			void remove(const key_type& x) { t.remove(x); }
+			void clear() { t.clear(); }
+
+			Iterator find(const key_type &x) { return t.find(x); }
+			ConstIterator find(const key_type &x) const { return t.find(x); }
+
+			T& at(const key_type &x) {
+				Iterator it;
+				it = find(x);
+				if (it == end())
+                    throw std::out_of_range("map at key out of range");
+                return it->second;
+			}
+
+			const T& at(const key_type &x) const {
+				ConstIterator it;
+				it = find(x);
+				if (it == end())
+                    throw std::out_of_range("map at key out of range");
+                return it->second;
+			}
+ 	};
+
+
+    template <class Key, class Value, class Compare>
+    inline bool operator==(Map<Key, Value, Compare>& x, 
+                           Map<Key, Value, Compare>& y) { 
+                auto iter = x.begin();
+                auto iter2 = y.begin();
+                for (iter = x.begin(); iter != x.end(); iter++,iter2++) {
+                    if(!((iter->first == iter2->first) && 
+                                (iter->second == iter2->second)))
+                        return false;
+                }
+                if (iter == x.end() && x.size() == y.size())
+                    return true; 
+                return false;
+    }
+
+    template <class Key, class Value, class Compare>
+    inline bool operator!=(Map<Key, Value, Compare>& x, 
+                           Map<Key, Value, Compare>& y) { 
+        return !operator==(x, y);
+    }

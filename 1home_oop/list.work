@@ -1,0 +1,30 @@
+ Deque_DEFINE(MyClass)
+ Deque_MyClass deq;
+ Deque_MyClass_ctor(&deq, MyClass_less_by_id)
+ deq.size(&deq);
+ deq.empty(&deq);
+ deq.push_back(&deq, MyClass{});
+ deq.push_front(&deq, MyClass{});
+ deq.front(&deq);
+ deq.back(&deq);
+ deq.pop_front(&deq);
+ deq.pop_back(&deq);
+
+
+ Deque_MyClass_Iterator it = qeq.begin(&deq);
+ !Deque_MyClass_Iterator_equal(it, deq.end(&deq)); it.inc(&it));
+ &it.deref(&it);
+ 
+ it.dec(&it);
+ deq.at(&deq,i)
+ 
+ deq.clear(&deq);
+ deq.dtor(&deq);
+ 
+ Deque_MyClass_ctor(&deq1, MyClass_less_y_id);
+ Deque_MyClass_ctor(&deq2, MyClass_less_y_id);
+
+ Deque_MyClass_equal(deq1, deq2);
+
+ to do 
+ : reallocated 
