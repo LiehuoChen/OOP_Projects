@@ -1,8 +1,8 @@
 1). My information
     
     Name : LieHuo Chen
-    B Num : B00442344
     Email: lchen66@binghamton.edu
+    B Num : B00442344
 
 
 2). Instruction for running the program
@@ -16,6 +16,8 @@
 
 3). Test myself
     
-    a. I have tested the program on cs.remote.binghamton.edu
+    a. I test the program on cs.remote.binghamton.edu
 
-    b. I have use the valgrind to check the memory leak, no leak.
+    b. I run the both tests from Professor and Chaoren Lin successfully.
+
+    c. I have use the valgrind to check the memory leak, no leak.

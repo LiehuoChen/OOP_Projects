@@ -1,0 +1,21 @@
+name: liehuo CHen
+bmail: lchen66@binghamton.edu
+B#: 00442344
+
+All the code are tested in remote machine.
+
+For part1 : 
+    1. I have finished the basic task.
+    2. For the challenge part, I have finished the basic manipulator,
+       but I have not done the "ffr(std::endl) and ffr(std::ends)"
+       So I comment the test file from line 125 to line 136
+For part2:
+    1. I have done the challenge part for lastdimensioniterator and it works
+    fine.
+
+
+For part3:
+    1. I have done this challenge part, but the result seems different from
+      the solution provied by professor.
+    2. My test files has been modified based on the provoided test file by 
+      adding two catches of LockedByOtherThread at line 106 and 126
